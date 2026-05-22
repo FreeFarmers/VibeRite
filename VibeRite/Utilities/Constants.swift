@@ -14,6 +14,7 @@ enum AppConstants {
 
     static let ollamaGenerateURL = URL(string: "http://localhost:11434/api/generate")!
     static let ollamaTagsURL = URL(string: "http://localhost:11434/api/tags")!
+    static let ollamaPullURL = URL(string: "http://localhost:11434/api/pull")!
 
     /// Global shortcut: ⌘⇧F
     static let hotkeyKeyCode: UInt32 = 3 // kVK_ANSI_F

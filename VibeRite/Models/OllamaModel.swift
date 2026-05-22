@@ -26,4 +26,21 @@ enum OllamaModel: String, CaseIterable, Identifiable, Codable {
     }
 
     static let `default`: OllamaModel = .llama32_3b
+
+    var pullCommand: String {
+        "ollama pull \(rawValue)"
+    }
+
+    func matchesInstalledName(_ installedName: String) -> Bool {
+        if installedName == rawValue { return true }
+        if installedName.hasPrefix("\(rawValue):") { return true }
+
+        // Require exact match when the supported model includes a tag (e.g. llama3.2:3b).
+        if rawValue.contains(":") {
+            return false
+        }
+
+        let installedBase = installedName.split(separator: ":", maxSplits: 1).first.map(String.init) ?? installedName
+        return installedBase == rawValue
+    }
 }

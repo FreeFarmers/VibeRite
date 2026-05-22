@@ -27,7 +27,7 @@ actor LLMService {
 
         switch provider {
         case .ollama:
-            return await ollama.isAvailable()
+            return await ollama.isModelReady(configuration.ollamaModel)
         case .cloudflare:
             guard await cloudflare.isConfigured(
                 accountID: configuration.cloudflareAccountID,
