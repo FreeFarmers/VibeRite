@@ -1,5 +1,5 @@
 # VibeRite
-<<<<<<< HEAD
+
 
 VibeRite is a native macOS writing assistant that improves selected text anywhere on your Mac using **local Ollama models**. No cloud APIs. Private by design.
 
@@ -129,6 +129,4 @@ Switch models in the VibeRite main window (segmented control). Choice is persist
 ## License
 
 Copyright © BitsVessel. All rights reserved.
-=======
-Native macOS writing assistant that improves selected text anywhere using local Ollama — a private and system-wide tool with no cloud connectivity.
->>>>>>> 1b722950d906ad68fb61baae6858a536c63377e6
+
