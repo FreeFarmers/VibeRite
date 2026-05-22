@@ -16,7 +16,7 @@ final class WritingCoordinator {
 
     private let promptService = PromptTemplateService()
     private let textReplacement = TextReplacementService.shared
-    private let ollama = OllamaService.shared
+    private let llm = LLMService.shared
 
     let processingState = ProcessingStateHolder.shared
     let floatingPanel = FloatingPanelController.shared
@@ -68,19 +68,17 @@ final class WritingCoordinator {
                 floatingPanel.show(state: processingState.state, nearMouse: true)
             }
 
-            processingState.update(.contactingOllama)
+            processingState.update(.contactingModel)
             floatingPanel.refresh(state: processingState.state)
 
             let prompt = promptService.buildPrompt(action: action, userText: inputText)
-            let model = AppSettings.shared.selectedModel
 
             processingState.update(.streaming)
             floatingPanel.refresh(state: processingState.state)
 
-            let improved = try await ollama.generate(
+            let improved = try await llm.generate(
                 prompt: prompt,
-                system: promptService.systemPrompt,
-                model: model
+                system: promptService.systemPrompt
             ) { [weak self] partial in
                 Task { @MainActor in
                     self?.processingState.setPartial(partial)

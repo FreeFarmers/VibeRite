@@ -12,43 +12,69 @@ struct PromptTemplateService {
     func instruction(for action: WritingAction) -> String {
         switch action {
         case .fixGrammar:
-            return "Fix grammar and spelling while preserving the original meaning and tone."
+            return """
+            Fix grammar and spelling while preserving the original meaning and tone. \
+            If the text is a question, return an improved version of that question — do not answer it.
+            """
         case .improveWriting:
-            return "Improve this writing for clarity, flow, and readability."
+            return """
+            Improve this writing for clarity, flow, and readability. \
+            Do not answer questions or add new information — only rewrite the provided text.
+            """
         case .professionalTone:
-            return "Rewrite this text in a professional and polished tone."
+            return """
+            Rewrite this text in a professional and polished tone. \
+            Do not answer questions or add advice — only rewrite the provided text.
+            """
         case .friendlyTone:
-            return "Rewrite this text in a warm and friendly tone."
+            return """
+            Rewrite this text in a warm and friendly tone. \
+            Do not answer questions or add advice — only rewrite the provided text.
+            """
         case .makeShorter:
             return "Shorten this text while preserving the key meaning."
         case .rewriteClearly:
-            return "Rewrite this text with maximum clarity and readability."
+            return """
+            Rewrite this text with maximum clarity and readability. \
+            Do not answer questions or add new information — only rewrite the provided text.
+            """
         case .summarize:
             return "Summarize this text in a concise and clear way."
         }
     }
 
-    /// System message sent to Ollama — keeps small models from adding conversational wrappers.
+    /// System message — keeps models from acting like chatbots.
     var systemPrompt: String {
         """
-        You are a silent text editor. Output only the final edited text.
-        Never write introductions, labels, or meta phrases such as "Here is the rewritten text".
-        Never use markdown fences or quotation marks around the result.
+        You are a silent writing editor. You rewrite or edit text the user provides.
+
+        Critical rules:
+        - NEVER answer questions in the input. If the input is a question, return an improved version of that same question.
+        - NEVER add facts, advice, recommendations, or sentences that were not in the original.
+        - NEVER explain your changes or reply conversationally.
+        - Output ONLY the final edited text.
+        - Preserve intent and format (questions stay questions, lists stay lists).
+        - No markdown fences or quotation marks around the result.
         """
     }
 
     func buildPrompt(action: WritingAction, userText: String) -> String {
         """
+        You are editing text, not replying to it.
+
         Task: \(instruction(for: action))
 
         Output rules (mandatory):
-        - Output ONLY the rewritten message body.
-        - No preamble, postamble, titles, or explanations.
+        - Rewrite ONLY the text inside the <text> tags below.
+        - Do not answer questions. Do not respond as a chatbot.
+        - Keep roughly the same length unless the task says to shorten or summarize.
+        - Output ONLY the rewritten text — no preamble, postamble, titles, or explanations.
         - No phrases like "Here is", "Here's", "Rewritten text", or "Sure".
         - Start directly with the first word of the rewritten text.
 
-        Message to rewrite:
+        <text>
         \(userText)
+        </text>
         """
     }
 
@@ -72,7 +98,6 @@ struct PromptTemplateService {
             }
         }
 
-        // Remove wrapping quotes if the model wrapped the entire output once.
         if result.hasPrefix("\""), result.hasSuffix("\""), result.count > 2 {
             result = String(result.dropFirst().dropLast())
         }

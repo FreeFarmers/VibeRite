@@ -10,7 +10,7 @@ import Foundation
 enum ProcessingPhase: Equatable {
     case idle
     case capturingSelection
-    case contactingOllama
+    case contactingModel
     case streaming
     case replacingText
     case succeeded
@@ -37,8 +37,8 @@ struct ProcessingState: Equatable {
             return "Ready"
         case .capturingSelection:
             return "Reading selection…"
-        case .contactingOllama:
-            return "Connecting to Ollama…"
+        case .contactingModel:
+            return "Connecting to model…"
         case .streaming:
             return "Improving text…"
         case .replacingText:

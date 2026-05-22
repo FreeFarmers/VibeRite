@@ -15,6 +15,13 @@ struct VibeRiteTests {
         let prompt = service.buildPrompt(action: .fixGrammar, userText: "hello world")
         #expect(prompt.contains("Fix grammar and spelling"))
         #expect(prompt.contains("hello world"))
+        #expect(prompt.contains("<text>"))
+        #expect(prompt.contains("Do not answer questions"))
+    }
+
+    @Test func systemPromptForbidsAnsweringQuestions() {
+        let service = PromptTemplateService()
+        #expect(service.systemPrompt.contains("NEVER answer questions"))
     }
 
     @Test func writingActionServiceMessagesAreUnique() {

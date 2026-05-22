@@ -74,7 +74,8 @@ actor OllamaService {
             model: model.rawValue,
             prompt: prompt,
             system: system,
-            stream: true
+            stream: true,
+            options: OllamaGenerateOptions(temperature: 0.2, topP: 0.9)
         )
         request.httpBody = try JSONEncoder().encode(body)
 
@@ -125,6 +126,17 @@ private struct OllamaGenerateRequest: Encodable {
     let prompt: String
     let system: String?
     let stream: Bool
+    let options: OllamaGenerateOptions?
+}
+
+private struct OllamaGenerateOptions: Encodable {
+    let temperature: Double
+    let topP: Double
+
+    enum CodingKeys: String, CodingKey {
+        case temperature
+        case topP = "top_p"
+    }
 }
 
 private struct OllamaStreamChunk: Decodable {

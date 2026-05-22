@@ -29,7 +29,16 @@ struct MainWindowView: View {
         .frame(minWidth: 520, minHeight: 640)
         .background(backgroundGradient)
         .onAppear {
-            viewModel.refreshOllamaStatus()
+            viewModel.refreshModelStatus()
+        }
+        .onChange(of: viewModel.selectedProvider) { _, _ in
+            viewModel.refreshModelStatus()
+        }
+        .onChange(of: viewModel.cloudflareAccountID) { _, _ in
+            viewModel.refreshModelStatus()
+        }
+        .onChange(of: viewModel.cloudflareAPIToken) { _, _ in
+            viewModel.refreshModelStatus()
         }
     }
 
@@ -39,18 +48,20 @@ struct MainWindowView: View {
                 Image("Logo")
                     .resizable()
                     .interpolation(.high)
-                    .frame(width: 36, height: 36)
-                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    .scaledToFit()
+                    .frame(width: 40, height: 40)
+                    .padding(4)
+                    .background(.black, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
                 VStack(alignment: .leading, spacing: 2) {
                     Text("VibeRite")
                         .font(.system(size: 28, weight: .bold, design: .rounded))
-                    Text("Private, on-device writing assistant")
+                    Text("Local & cloud writing assistant")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
             }
 
-            Text("Select text in any app, press ⌘⇧F, or use the Services menu to improve writing with local Ollama models.")
+            Text("Select text in any app, press ⌘⇧F, or use the Services menu to improve writing with local Ollama or Cloudflare AI.")
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -59,33 +70,76 @@ struct MainWindowView: View {
 
     private var ollamaSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Ollama")
+            Text("AI Model")
                 .font(.headline)
+
+            Picker("Provider", selection: $viewModel.selectedProvider) {
+                ForEach(AIModelProvider.allCases) { provider in
+                    Text(provider.displayName).tag(provider)
+                }
+            }
+            .pickerStyle(.segmented)
+
+            Text(viewModel.selectedProvider.subtitle)
+                .font(.caption)
+                .foregroundStyle(.secondary)
 
             HStack {
                 Label(
-                    viewModel.isOllamaAvailable ? "Connected" : "Not running",
-                    systemImage: viewModel.isOllamaAvailable ? "bolt.fill" : "bolt.slash.fill"
+                    viewModel.isModelAvailable ? "Ready" : statusLabel,
+                    systemImage: viewModel.isModelAvailable ? "bolt.fill" : "bolt.slash.fill"
                 )
-                .foregroundStyle(viewModel.isOllamaAvailable ? .green : .orange)
+                .foregroundStyle(viewModel.isModelAvailable ? .green : .orange)
 
                 Spacer()
 
                 Button("Check") {
-                    viewModel.refreshOllamaStatus()
+                    viewModel.refreshModelStatus()
                 }
                 .buttonStyle(.bordered)
             }
 
-            Picker("Model", selection: $viewModel.selectedModel) {
-                ForEach(OllamaModel.allCases) { model in
-                    Text(model.displayName).tag(model)
+            switch viewModel.selectedProvider {
+            case .ollama:
+                Picker("Model", selection: $viewModel.selectedModel) {
+                    ForEach(OllamaModel.allCases) { model in
+                        Text(model.displayName).tag(model)
+                    }
+                }
+                .pickerStyle(.segmented)
+
+            case .cloudflare:
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Selected text is sent to Cloudflare for processing.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    TextField("Account ID", text: $viewModel.cloudflareAccountID)
+                        .textFieldStyle(.roundedBorder)
+
+                    SecureField("API Token", text: $viewModel.cloudflareAPIToken)
+                        .textFieldStyle(.roundedBorder)
+
+                    Picker("Model", selection: $viewModel.selectedCloudflareModel) {
+                        ForEach(CloudflareModel.allCases) { model in
+                            Text(model.displayName).tag(model)
+                        }
+                    }
+                    .pickerStyle(.menu)
                 }
             }
-            .pickerStyle(.segmented)
         }
         .padding(16)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+
+    private var statusLabel: String {
+        switch viewModel.selectedProvider {
+        case .ollama:
+            return "Not running"
+        case .cloudflare:
+            return "Not configured"
+        }
     }
 
     private var shortcutsSection: some View {
@@ -121,7 +175,7 @@ struct MainWindowView: View {
                         viewModel.runAction(action)
                     }
                     .buttonStyle(.bordered)
-                    .disabled(!viewModel.isAccessibilityGranted || !viewModel.isOllamaAvailable)
+                    .disabled(!viewModel.isAccessibilityGranted || !viewModel.isModelAvailable)
                 }
             }
         }
