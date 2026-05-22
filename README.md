@@ -126,7 +126,4 @@ Switch models in the VibeRite main window (segmented control). Choice is persist
 - Writing history
 - Menu bar command palette
 
-## License
-
-Copyright © BitsVessel. All rights reserved.
 
