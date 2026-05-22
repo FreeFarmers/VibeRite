@@ -51,6 +51,34 @@ final class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(hasCompletedOnboarding, forKey: Keys.hasCompletedOnboarding) }
     }
 
+    func persistSelectedModel(_ model: OllamaModel) {
+        UserDefaults.standard.set(model.rawValue, forKey: Keys.selectedModel)
+        if selectedModel != model {
+            selectedModel = model
+        }
+    }
+
+    func persistSelectedProvider(_ provider: AIModelProvider) {
+        UserDefaults.standard.set(provider.rawValue, forKey: Keys.selectedProvider)
+        if selectedProvider != provider {
+            selectedProvider = provider
+        }
+    }
+
+    func persistSelectedCloudflareModel(_ model: CloudflareModel) {
+        UserDefaults.standard.set(model.rawValue, forKey: Keys.selectedCloudflareModel)
+        if selectedCloudflareModel != model {
+            selectedCloudflareModel = model
+        }
+    }
+
+    func persistCloudflareAccountID(_ accountID: String) {
+        UserDefaults.standard.set(accountID, forKey: Keys.cloudflareAccountID)
+        if cloudflareAccountID != accountID {
+            cloudflareAccountID = accountID
+        }
+    }
+
     var cloudflareCredentials: CloudflareCredentials {
         CloudflareCredentials(
             accountID: cloudflareAccountID,

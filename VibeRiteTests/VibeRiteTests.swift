@@ -41,11 +41,21 @@ struct VibeRiteTests {
         #expect(cleaned.hasPrefix("Hi Alma"))
     }
 
+    @Test func ollamaModelPullCommandUsesRawValue() {
+        #expect(OllamaModel.llama32_3b.pullCommand == "ollama pull llama3.2:3b")
+    }
+
+    @Test func ollamaModelMatchesInstalledNames() {
+        #expect(OllamaModel.llama32_3b.matchesInstalledName("llama3.2:3b"))
+        #expect(OllamaModel.llama32_3b.matchesInstalledName("llama3.2:3b:latest"))
+        #expect(!OllamaModel.llama32_3b.matchesInstalledName("llama3"))
+        #expect(OllamaModel.gemma.matchesInstalledName("gemma"))
+        #expect(OllamaModel.gemma.matchesInstalledName("gemma:2b"))
+        #expect(!OllamaModel.gemma.matchesInstalledName("llama3.2:3b"))
+    }
+
     @Test func ollamaModelsHaveStableRawValues() {
         #expect(OllamaModel.llama32_3b.rawValue == "llama3.2:3b")
-        #expect(OllamaModel.llama3.rawValue == "llama3")
-        #expect(OllamaModel.mistral.rawValue == "mistral")
-        #expect(OllamaModel.gemma.rawValue == "gemma")
         #expect(OllamaModel.default == .llama32_3b)
     }
 }

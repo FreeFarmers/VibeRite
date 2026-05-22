@@ -9,6 +9,9 @@ import SwiftUI
 
 struct MainWindowView: View {
     @StateObject private var viewModel = MainViewModel()
+    @State private var pickerProvider: AIModelProvider = AppSettings.shared.selectedProvider
+    @State private var pickerModel: OllamaModel = AppSettings.shared.selectedModel
+    @State private var pickerCloudflareModel: CloudflareModel = AppSettings.shared.selectedCloudflareModel
 
     var body: some View {
         ScrollView {
@@ -29,15 +32,9 @@ struct MainWindowView: View {
         .frame(minWidth: 520, minHeight: 640)
         .background(backgroundGradient)
         .onAppear {
-            viewModel.refreshModelStatus()
-        }
-        .onChange(of: viewModel.selectedProvider) { _, _ in
-            viewModel.refreshModelStatus()
-        }
-        .onChange(of: viewModel.cloudflareAccountID) { _, _ in
-            viewModel.refreshModelStatus()
-        }
-        .onChange(of: viewModel.cloudflareAPIToken) { _, _ in
+            pickerProvider = viewModel.selectedProvider
+            pickerModel = viewModel.selectedModel
+            pickerCloudflareModel = viewModel.selectedCloudflareModel
             viewModel.refreshModelStatus()
         }
     }
@@ -73,40 +70,35 @@ struct MainWindowView: View {
             Text("AI Model")
                 .font(.headline)
 
-            Picker("Provider", selection: $viewModel.selectedProvider) {
+            Picker("Provider", selection: $pickerProvider) {
                 ForEach(AIModelProvider.allCases) { provider in
                     Text(provider.displayName).tag(provider)
                 }
             }
             .pickerStyle(.segmented)
+            .onChange(of: pickerProvider) { _, newValue in
+                viewModel.applyProviderSelection(newValue)
+            }
 
-            Text(viewModel.selectedProvider.subtitle)
+            Text(pickerProvider.subtitle)
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
-            HStack {
-                Label(
-                    viewModel.isModelAvailable ? "Ready" : statusLabel,
-                    systemImage: viewModel.isModelAvailable ? "bolt.fill" : "bolt.slash.fill"
-                )
-                .foregroundStyle(viewModel.isModelAvailable ? .green : .orange)
+            statusRow
 
-                Spacer()
-
-                Button("Check") {
-                    viewModel.refreshModelStatus()
-                }
-                .buttonStyle(.bordered)
-            }
-
-            switch viewModel.selectedProvider {
+            switch pickerProvider {
             case .ollama:
-                Picker("Model", selection: $viewModel.selectedModel) {
+                Picker("Model", selection: $pickerModel) {
                     ForEach(OllamaModel.allCases) { model in
                         Text(model.displayName).tag(model)
                     }
                 }
                 .pickerStyle(.segmented)
+                .onChange(of: pickerModel) { _, newValue in
+                    viewModel.applyModelSelection(newValue)
+                }
+
+                ollamaSetupSection
 
             case .cloudflare:
                 VStack(alignment: .leading, spacing: 10) {
@@ -116,16 +108,25 @@ struct MainWindowView: View {
 
                     TextField("Account ID", text: $viewModel.cloudflareAccountID)
                         .textFieldStyle(.roundedBorder)
+                        .onSubmit {
+                            viewModel.applyCloudflareAccountID(viewModel.cloudflareAccountID)
+                        }
 
                     SecureField("API Token", text: $viewModel.cloudflareAPIToken)
                         .textFieldStyle(.roundedBorder)
+                        .onSubmit {
+                            viewModel.applyCloudflareToken(viewModel.cloudflareAPIToken)
+                        }
 
-                    Picker("Model", selection: $viewModel.selectedCloudflareModel) {
+                    Picker("Model", selection: $pickerCloudflareModel) {
                         ForEach(CloudflareModel.allCases) { model in
                             Text(model.displayName).tag(model)
                         }
                     }
                     .pickerStyle(.menu)
+                    .onChange(of: pickerCloudflareModel) { _, newValue in
+                        viewModel.applyCloudflareModelSelection(newValue)
+                    }
                 }
             }
         }
@@ -133,12 +134,133 @@ struct MainWindowView: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
-    private var statusLabel: String {
-        switch viewModel.selectedProvider {
+    private var statusRow: some View {
+        HStack {
+            Label(
+                statusTitle,
+                systemImage: statusIcon
+            )
+            .foregroundStyle(statusColor)
+
+            Spacer()
+
+            Button("Check") {
+                viewModel.refreshModelStatus()
+            }
+            .buttonStyle(.bordered)
+        }
+    }
+
+    private var ollamaSetupSection: some View {
+        Group {
+            if pickerProvider == .ollama {
+                switch viewModel.ollamaSetupState {
+                case .checking:
+                    EmptyView()
+
+                case .ready:
+                    EmptyView()
+
+                case .notRunning:
+                    ollamaHelpBox(
+                        detail: "Start Ollama, then check again.",
+                        command: "ollama serve",
+                        primaryTitle: "Copy `ollama serve`",
+                        primaryAction: viewModel.copyServeCommand,
+                        secondaryTitle: "Open in Terminal",
+                        secondaryAction: viewModel.openTerminalWithServeCommand
+                    )
+
+                case .modelNotInstalled:
+                    ollamaHelpBox(
+                        detail: "\(viewModel.selectedModel.displayName) is not installed yet.",
+                        command: viewModel.selectedModel.pullCommand,
+                        primaryTitle: "Download model",
+                        primaryAction: viewModel.downloadSelectedModel,
+                        secondaryTitle: viewModel.didCopyCommand ? "Copied!" : "Copy pull command",
+                        secondaryAction: viewModel.copyPullCommand
+                    )
+
+                case .downloading(let progress):
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Downloading \(viewModel.selectedModel.displayName)…")
+                            .font(.subheadline)
+                        if let progress {
+                            ProgressView(value: progress)
+                        } else {
+                            ProgressView()
+                        }
+                        Text("Keep Ollama running until the download finishes.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+
+                case .downloadFailed(let message):
+                    ollamaHelpBox(
+                        detail: message,
+                        command: viewModel.selectedModel.pullCommand,
+                        primaryTitle: "Try again",
+                        primaryAction: viewModel.downloadSelectedModel,
+                        secondaryTitle: "Copy pull command",
+                        secondaryAction: viewModel.copyPullCommand
+                    )
+                }
+            }
+        }
+    }
+
+    private func ollamaHelpBox(
+        detail: String,
+        command: String,
+        primaryTitle: String,
+        primaryAction: @escaping () -> Void,
+        secondaryTitle: String,
+        secondaryAction: @escaping () -> Void
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(detail)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            HStack(spacing: 8) {
+                Button(primaryTitle, action: primaryAction)
+                    .buttonStyle(.borderedProminent)
+                Button(secondaryTitle, action: secondaryAction)
+                    .buttonStyle(.bordered)
+            }
+
+            Text(command)
+                .font(.system(.caption, design: .monospaced))
+                .foregroundStyle(.secondary)
+                .textSelection(.enabled)
+        }
+    }
+
+    private var statusTitle: String {
+        switch pickerProvider {
         case .ollama:
-            return "Not running"
+            return viewModel.ollamaSetupState.statusTitle
         case .cloudflare:
-            return "Not configured"
+            return viewModel.isModelAvailable ? "Ready" : "Not configured"
+        }
+    }
+
+    private var statusIcon: String {
+        switch pickerProvider {
+        case .ollama:
+            return viewModel.ollamaSetupState.isReady ? "bolt.fill" : "bolt.slash.fill"
+        case .cloudflare:
+            return viewModel.isModelAvailable ? "bolt.fill" : "bolt.slash.fill"
+        }
+    }
+
+    private var statusColor: Color {
+        switch pickerProvider {
+        case .ollama:
+            return viewModel.ollamaSetupState.isReady ? .green : .orange
+        case .cloudflare:
+            return viewModel.isModelAvailable ? .green : .orange
         }
     }
 
