@@ -12,37 +12,50 @@
 			containerPortal = 5D4945832FC08B3E008F043F /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 5D49458A2FC08B3E008F043F;
-			remoteInfo = RiteVibe;
+			remoteInfo = VibeRite;
 		};
 		5D4945A32FC08B40008F043F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5D4945832FC08B3E008F043F /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 5D49458A2FC08B3E008F043F;
-			remoteInfo = RiteVibe;
+			remoteInfo = VibeRite;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5D49458B2FC08B3E008F043F /* RiteVibe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RiteVibe.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5D4945982FC08B40008F043F /* RiteVibeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RiteVibeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5D4945A22FC08B40008F043F /* RiteVibeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RiteVibeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D49458B2FC08B3E008F043F /* VibeRite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VibeRite.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D4945982FC08B40008F043F /* VibeRiteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VibeRiteTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D4945A22FC08B40008F043F /* VibeRiteUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VibeRiteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5D4945C02FC08B41008F043F /* Exceptions for "VibeRite" folder in "VibeRite" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 5D49458A2FC08B3E008F043F /* VibeRite */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		5D49458D2FC08B3E008F043F /* RiteVibe */ = {
+		5D49458D2FC08B3E008F043F /* VibeRite */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = RiteVibe;
+			exceptions = (
+				5D4945C02FC08B41008F043F /* Exceptions for "VibeRite" folder in "VibeRite" target */,
+			);
+			path = VibeRite;
 			sourceTree = "<group>";
 		};
-		5D49459B2FC08B40008F043F /* RiteVibeTests */ = {
+		5D49459B2FC08B40008F043F /* VibeRiteTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = RiteVibeTests;
+			path = VibeRiteTests;
 			sourceTree = "<group>";
 		};
-		5D4945A52FC08B40008F043F /* RiteVibeUITests */ = {
+		5D4945A52FC08B40008F043F /* VibeRiteUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = RiteVibeUITests;
+			path = VibeRiteUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,9 +88,9 @@
 		5D4945822FC08B3E008F043F = {
 			isa = PBXGroup;
 			children = (
-				5D49458D2FC08B3E008F043F /* RiteVibe */,
-				5D49459B2FC08B40008F043F /* RiteVibeTests */,
-				5D4945A52FC08B40008F043F /* RiteVibeUITests */,
+				5D49458D2FC08B3E008F043F /* VibeRite */,
+				5D49459B2FC08B40008F043F /* VibeRiteTests */,
+				5D4945A52FC08B40008F043F /* VibeRiteUITests */,
 				5D49458C2FC08B3E008F043F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -85,9 +98,9 @@
 		5D49458C2FC08B3E008F043F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5D49458B2FC08B3E008F043F /* RiteVibe.app */,
-				5D4945982FC08B40008F043F /* RiteVibeTests.xctest */,
-				5D4945A22FC08B40008F043F /* RiteVibeUITests.xctest */,
+				5D49458B2FC08B3E008F043F /* VibeRite.app */,
+				5D4945982FC08B40008F043F /* VibeRiteTests.xctest */,
+				5D4945A22FC08B40008F043F /* VibeRiteUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,9 +108,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		5D49458A2FC08B3E008F043F /* RiteVibe */ = {
+		5D49458A2FC08B3E008F043F /* VibeRite */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5D4945AC2FC08B40008F043F /* Build configuration list for PBXNativeTarget "RiteVibe" */;
+			buildConfigurationList = 5D4945AC2FC08B40008F043F /* Build configuration list for PBXNativeTarget "VibeRite" */;
 			buildPhases = (
 				5D4945872FC08B3E008F043F /* Sources */,
 				5D4945882FC08B3E008F043F /* Frameworks */,
@@ -108,18 +121,18 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				5D49458D2FC08B3E008F043F /* RiteVibe */,
+				5D49458D2FC08B3E008F043F /* VibeRite */,
 			);
-			name = RiteVibe;
+			name = VibeRite;
 			packageProductDependencies = (
 			);
-			productName = RiteVibe;
-			productReference = 5D49458B2FC08B3E008F043F /* RiteVibe.app */;
+			productName = VibeRite;
+			productReference = 5D49458B2FC08B3E008F043F /* VibeRite.app */;
 			productType = "com.apple.product-type.application";
 		};
-		5D4945972FC08B40008F043F /* RiteVibeTests */ = {
+		5D4945972FC08B40008F043F /* VibeRiteTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5D4945AF2FC08B40008F043F /* Build configuration list for PBXNativeTarget "RiteVibeTests" */;
+			buildConfigurationList = 5D4945AF2FC08B40008F043F /* Build configuration list for PBXNativeTarget "VibeRiteTests" */;
 			buildPhases = (
 				5D4945942FC08B40008F043F /* Sources */,
 				5D4945952FC08B40008F043F /* Frameworks */,
@@ -131,18 +144,18 @@
 				5D49459A2FC08B40008F043F /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				5D49459B2FC08B40008F043F /* RiteVibeTests */,
+				5D49459B2FC08B40008F043F /* VibeRiteTests */,
 			);
-			name = RiteVibeTests;
+			name = VibeRiteTests;
 			packageProductDependencies = (
 			);
-			productName = RiteVibeTests;
-			productReference = 5D4945982FC08B40008F043F /* RiteVibeTests.xctest */;
+			productName = VibeRiteTests;
+			productReference = 5D4945982FC08B40008F043F /* VibeRiteTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		5D4945A12FC08B40008F043F /* RiteVibeUITests */ = {
+		5D4945A12FC08B40008F043F /* VibeRiteUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5D4945B22FC08B40008F043F /* Build configuration list for PBXNativeTarget "RiteVibeUITests" */;
+			buildConfigurationList = 5D4945B22FC08B40008F043F /* Build configuration list for PBXNativeTarget "VibeRiteUITests" */;
 			buildPhases = (
 				5D49459E2FC08B40008F043F /* Sources */,
 				5D49459F2FC08B40008F043F /* Frameworks */,
@@ -154,13 +167,13 @@
 				5D4945A42FC08B40008F043F /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				5D4945A52FC08B40008F043F /* RiteVibeUITests */,
+				5D4945A52FC08B40008F043F /* VibeRiteUITests */,
 			);
-			name = RiteVibeUITests;
+			name = VibeRiteUITests;
 			packageProductDependencies = (
 			);
-			productName = RiteVibeUITests;
-			productReference = 5D4945A22FC08B40008F043F /* RiteVibeUITests.xctest */;
+			productName = VibeRiteUITests;
+			productReference = 5D4945A22FC08B40008F043F /* VibeRiteUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -186,7 +199,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 5D4945862FC08B3E008F043F /* Build configuration list for PBXProject "RiteVibe" */;
+			buildConfigurationList = 5D4945862FC08B3E008F043F /* Build configuration list for PBXProject "VibeRite" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -200,9 +213,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5D49458A2FC08B3E008F043F /* RiteVibe */,
-				5D4945972FC08B40008F043F /* RiteVibeTests */,
-				5D4945A12FC08B40008F043F /* RiteVibeUITests */,
+				5D49458A2FC08B3E008F043F /* VibeRite */,
+				5D4945972FC08B40008F043F /* VibeRiteTests */,
+				5D4945A12FC08B40008F043F /* VibeRiteUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -258,12 +271,12 @@
 /* Begin PBXTargetDependency section */
 		5D49459A2FC08B40008F043F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 5D49458A2FC08B3E008F043F /* RiteVibe */;
+			target = 5D49458A2FC08B3E008F043F /* VibeRite */;
 			targetProxy = 5D4945992FC08B40008F043F /* PBXContainerItemProxy */;
 		};
 		5D4945A42FC08B40008F043F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 5D49458A2FC08B3E008F043F /* RiteVibe */;
+			target = 5D49458A2FC08B3E008F043F /* VibeRite */;
 			targetProxy = 5D4945A32FC08B40008F043F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -323,7 +336,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.4;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -381,7 +394,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.4;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -394,22 +407,23 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = VibeRite/VibeRite.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = GLDH2T9TP5;
-				ENABLE_APP_SANDBOX = YES;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = VibeRite/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.BitsVessel.RiteVibe;
+				PRODUCT_BUNDLE_IDENTIFIER = com.BitsVessel.VibeRite;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -426,22 +440,23 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = VibeRite/VibeRite.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = GLDH2T9TP5;
-				ENABLE_APP_SANDBOX = YES;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = VibeRite/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.BitsVessel.RiteVibe;
+				PRODUCT_BUNDLE_IDENTIFIER = com.BitsVessel.VibeRite;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -461,16 +476,16 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = GLDH2T9TP5;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.4;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.BitsVessel.RiteVibeTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.BitsVessel.VibeRiteTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RiteVibe.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/RiteVibe";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VibeRite.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VibeRite";
 			};
 			name = Debug;
 		};
@@ -482,16 +497,16 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = GLDH2T9TP5;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.4;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.BitsVessel.RiteVibeTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.BitsVessel.VibeRiteTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RiteVibe.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/RiteVibe";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VibeRite.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VibeRite";
 			};
 			name = Release;
 		};
@@ -503,14 +518,14 @@
 				DEVELOPMENT_TEAM = GLDH2T9TP5;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.BitsVessel.RiteVibeUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.BitsVessel.VibeRiteUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = RiteVibe;
+				TEST_TARGET_NAME = VibeRite;
 			};
 			name = Debug;
 		};
@@ -522,21 +537,21 @@
 				DEVELOPMENT_TEAM = GLDH2T9TP5;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.BitsVessel.RiteVibeUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.BitsVessel.VibeRiteUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = RiteVibe;
+				TEST_TARGET_NAME = VibeRite;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		5D4945862FC08B3E008F043F /* Build configuration list for PBXProject "RiteVibe" */ = {
+		5D4945862FC08B3E008F043F /* Build configuration list for PBXProject "VibeRite" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5D4945AA2FC08B40008F043F /* Debug */,
@@ -545,7 +560,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5D4945AC2FC08B40008F043F /* Build configuration list for PBXNativeTarget "RiteVibe" */ = {
+		5D4945AC2FC08B40008F043F /* Build configuration list for PBXNativeTarget "VibeRite" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5D4945AD2FC08B40008F043F /* Debug */,
@@ -554,7 +569,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5D4945AF2FC08B40008F043F /* Build configuration list for PBXNativeTarget "RiteVibeTests" */ = {
+		5D4945AF2FC08B40008F043F /* Build configuration list for PBXNativeTarget "VibeRiteTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5D4945B02FC08B40008F043F /* Debug */,
@@ -563,7 +578,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5D4945B22FC08B40008F043F /* Build configuration list for PBXNativeTarget "RiteVibeUITests" */ = {
+		5D4945B22FC08B40008F043F /* Build configuration list for PBXNativeTarget "VibeRiteUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5D4945B32FC08B40008F043F /* Debug */,

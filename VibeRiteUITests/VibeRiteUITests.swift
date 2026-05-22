@@ -1,13 +1,13 @@
 //
-//  RiteVibeUITests.swift
-//  RiteVibeUITests
+//  VibeRiteUITests.swift
+//  VibeRiteUITests
 //
 //  Created by Ahsan Minhas on 22/05/2026.
 //
 
 import XCTest
 
-final class RiteVibeUITests: XCTestCase {
+final class VibeRiteUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

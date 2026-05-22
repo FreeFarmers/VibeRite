@@ -1,13 +1,13 @@
 //
-//  RiteVibeUITestsLaunchTests.swift
-//  RiteVibeUITests
+//  VibeRiteUITestsLaunchTests.swift
+//  VibeRiteUITests
 //
 //  Created by Ahsan Minhas on 22/05/2026.
 //
 
 import XCTest
 
-final class RiteVibeUITestsLaunchTests: XCTestCase {
+final class VibeRiteUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
