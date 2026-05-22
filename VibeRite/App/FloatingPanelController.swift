@@ -13,7 +13,11 @@ import SwiftUI
 final class FloatingPanelController: NSObject {
     static let shared = FloatingPanelController()
 
+    private static let statusSize = NSSize(width: 420, height: 96)
+    private static let previewSize = NSSize(width: 420, height: 340)
+
     private var panel: NSPanel?
+    private var hostingView: NSHostingView<FloatingPanelView>?
     private var hideTask: Task<Void, Never>?
 
     private override init() {
@@ -24,9 +28,7 @@ final class FloatingPanelController: NSObject {
         hideTask?.cancel()
 
         let panel = ensurePanel()
-        let rootView = FloatingPanelView(state: state)
-        panel.contentView = NSHostingView(rootView: rootView)
-
+        applySize(for: state, to: panel)
         position(panel: panel, nearMouse: nearMouse)
         // Keep the user's app focused so ⌘V reaches their text field.
         panel.orderFrontRegardless()
@@ -34,7 +36,7 @@ final class FloatingPanelController: NSObject {
 
     func refresh(state: ProcessingState) {
         guard let panel, panel.isVisible else { return }
-        panel.contentView = NSHostingView(rootView: FloatingPanelView(state: state))
+        applySize(for: state, to: panel)
         position(panel: panel, nearMouse: true)
     }
 
@@ -43,15 +45,20 @@ final class FloatingPanelController: NSObject {
         hideTask = Task {
             try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
             guard !Task.isCancelled else { return }
-            panel?.orderOut(nil)
+            hide()
         }
+    }
+
+    func hide() {
+        hideTask?.cancel()
+        panel?.orderOut(nil)
     }
 
     private func ensurePanel() -> NSPanel {
         if let panel { return panel }
 
         let panel = NSPanel(
-            contentRect: NSRect(x: 0, y: 0, width: 300, height: 72),
+            contentRect: NSRect(origin: .zero, size: Self.statusSize),
             styleMask: [.nonactivatingPanel, .fullSizeContentView, .hudWindow],
             backing: .buffered,
             defer: false
@@ -69,8 +76,38 @@ final class FloatingPanelController: NSObject {
         panel.standardWindowButton(.miniaturizeButton)?.isHidden = true
         panel.standardWindowButton(.zoomButton)?.isHidden = true
 
+        let rootView = FloatingPanelView(processingState: ProcessingStateHolder.shared)
+        let hosting = NSHostingView(rootView: rootView)
+        hosting.translatesAutoresizingMaskIntoConstraints = false
+        panel.contentView = hosting
+        hostingView = hosting
+
         self.panel = panel
         return panel
+    }
+
+    private func applySize(for state: ProcessingState, to panel: NSPanel) {
+        var targetSize = panelSize(for: state)
+        hostingView?.layoutSubtreeIfNeeded()
+
+        if let hostingView {
+            let fittingSize = hostingView.fittingSize
+            targetSize.width = max(targetSize.width, fittingSize.width)
+            targetSize.height = max(targetSize.height, fittingSize.height)
+        }
+
+        var frame = panel.frame
+        let previousOrigin = frame.origin
+        frame.size = targetSize
+        frame.origin = previousOrigin
+        panel.setFrame(frame, display: true)
+    }
+
+    private func panelSize(for state: ProcessingState) -> NSSize {
+        if case .preview = state.phase {
+            return Self.previewSize
+        }
+        return Self.statusSize
     }
 
     private func position(panel: NSPanel, nearMouse: Bool) {

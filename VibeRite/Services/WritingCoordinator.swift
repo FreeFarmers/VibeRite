@@ -9,7 +9,7 @@ import AppKit
 import Combine
 import Foundation
 
-/// Orchestrates capture → Ollama → replace for hotkey and Services workflows.
+/// Orchestrates capture → model → preview → replace for hotkey and Services workflows.
 @MainActor
 final class WritingCoordinator {
     static let shared = WritingCoordinator()
@@ -20,6 +20,16 @@ final class WritingCoordinator {
 
     let processingState = ProcessingStateHolder.shared
     let floatingPanel = FloatingPanelController.shared
+
+    private struct PendingReplacement {
+        let source: Source
+        let targetApp: NSRunningApplication?
+        let servicePasteboard: NSPasteboard?
+        let cleanedText: String
+    }
+
+    private var pendingReplacement: PendingReplacement?
+    private var previewContinuation: CheckedContinuation<PreviewDecision, Never>?
 
     private init() {}
 
@@ -35,7 +45,7 @@ final class WritingCoordinator {
     }
 
     func process(action: WritingAction, source: Source) async throws {
-        guard !processingState.state.isBusy else { return }
+        guard !processingState.state.blocksNewRequests else { return }
 
         if case .hotkey = source {
             guard PermissionsManager.shared.isReadyForSystemWideUse else {
@@ -48,7 +58,6 @@ final class WritingCoordinator {
 
         processingState.begin(action: action)
 
-        // Remember the app where text is selected before any VibeRite UI appears.
         let targetApp: NSRunningApplication? = {
             if case .hotkey = source { return TextReplacementService.frontmostTargetApp() }
             return nil
@@ -60,12 +69,11 @@ final class WritingCoordinator {
             let inputText: String
             switch source {
             case .hotkey:
-                // Capture while the target app still has focus (don't activate VibeRite first).
                 inputText = try await textReplacement.captureSelectedText(targetApp: targetApp)
                 floatingPanel.show(state: processingState.state, nearMouse: true)
             case .service(let pasteboard):
                 inputText = try textReplacement.textFromServicePasteboard(pasteboard)
-                floatingPanel.show(state: processingState.state, nearMouse: true)
+                floatingPanel.show(state: processingState.state, nearMouse: false)
             }
 
             processingState.update(.contactingModel)
@@ -88,6 +96,27 @@ final class WritingCoordinator {
 
             let cleaned = promptService.sanitizeModelOutput(improved)
 
+            let servicePasteboard: NSPasteboard? = {
+                if case .service(let pasteboard) = source { return pasteboard }
+                return nil
+            }()
+
+            pendingReplacement = PendingReplacement(
+                source: source,
+                targetApp: targetApp,
+                servicePasteboard: servicePasteboard,
+                cleanedText: cleaned
+            )
+
+            let decision = await waitForPreviewConfirmation(original: inputText, improved: cleaned)
+            pendingReplacement = nil
+
+            guard decision == .apply else {
+                processingState.reset()
+                floatingPanel.hide()
+                return
+            }
+
             processingState.update(.replacingText)
             floatingPanel.refresh(state: processingState.state)
 
@@ -102,12 +131,42 @@ final class WritingCoordinator {
             floatingPanel.refresh(state: processingState.state)
             floatingPanel.scheduleAutoHide()
         } catch {
+            pendingReplacement = nil
+            cancelPreviewContinuation(with: .cancel)
             let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
             processingState.update(.failed(message))
             floatingPanel.refresh(state: processingState.state)
             floatingPanel.scheduleAutoHide(delay: 3.0)
             throw error
         }
+    }
+
+    func applyPreview() {
+        resumePreview(with: .apply)
+    }
+
+    func cancelPreview() {
+        resumePreview(with: .cancel)
+    }
+
+    private func waitForPreviewConfirmation(original: String, improved: String) async -> PreviewDecision {
+        await withCheckedContinuation { continuation in
+            previewContinuation = continuation
+            processingState.showPreview(original: original, improved: improved)
+            floatingPanel.refresh(state: processingState.state)
+        }
+    }
+
+    private func resumePreview(with decision: PreviewDecision) {
+        guard let continuation = previewContinuation else { return }
+        previewContinuation = nil
+        continuation.resume(returning: decision)
+    }
+
+    private func cancelPreviewContinuation(with decision: PreviewDecision) {
+        guard let continuation = previewContinuation else { return }
+        previewContinuation = nil
+        continuation.resume(returning: decision)
     }
 }
 
@@ -125,11 +184,30 @@ final class ProcessingStateHolder: ObservableObject {
     }
 
     func update(_ phase: ProcessingPhase) {
-        state.phase = phase
+        var next = state
+        next.phase = phase
+        state = next
     }
 
     func setPartial(_ text: String) {
-        state.partialResponse = text
-        state.phase = .streaming
+        guard state.phase != .preview, state.phase != .replacingText else { return }
+
+        var next = state
+        next.partialResponse = text
+        next.phase = .streaming
+        state = next
+    }
+
+    func showPreview(original: String, improved: String) {
+        var next = state
+        next.originalText = original
+        next.previewText = improved
+        next.partialResponse = improved
+        next.phase = .preview
+        state = next
+    }
+
+    func reset() {
+        state = ProcessingState()
     }
 }

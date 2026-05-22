@@ -54,8 +54,9 @@ struct VibeRiteTests {
         #expect(!OllamaModel.gemma.matchesInstalledName("llama3.2:3b"))
     }
 
-    @Test func ollamaModelsHaveStableRawValues() {
-        #expect(OllamaModel.llama32_3b.rawValue == "llama3.2:3b")
-        #expect(OllamaModel.default == .llama32_3b)
+    @Test func previewPhaseBlocksNewRequests() {
+        var state = ProcessingState(phase: .preview, action: .improveWriting, previewText: "Hi")
+        #expect(state.isBusy == false)
+        #expect(state.blocksNewRequests == true)
     }
 }

@@ -12,6 +12,7 @@ enum ProcessingPhase: Equatable {
     case capturingSelection
     case contactingModel
     case streaming
+    case preview
     case replacingText
     case succeeded
     case failed(String)
@@ -21,8 +22,19 @@ struct ProcessingState: Equatable {
     var phase: ProcessingPhase = .idle
     var action: WritingAction?
     var partialResponse: String = ""
+    var originalText: String = ""
+    var previewText: String = ""
 
     var isBusy: Bool {
+        switch phase {
+        case .idle, .succeeded, .failed, .preview:
+            return false
+        default:
+            return true
+        }
+    }
+
+    var blocksNewRequests: Bool {
         switch phase {
         case .idle, .succeeded, .failed:
             return false
@@ -41,6 +53,8 @@ struct ProcessingState: Equatable {
             return "Connecting to model…"
         case .streaming:
             return "Improving text…"
+        case .preview:
+            return "Review the preview, then apply or cancel."
         case .replacingText:
             return "Applying changes…"
         case .succeeded:
@@ -49,4 +63,9 @@ struct ProcessingState: Equatable {
             return message
         }
     }
+}
+
+enum PreviewDecision: Equatable {
+    case apply
+    case cancel
 }
